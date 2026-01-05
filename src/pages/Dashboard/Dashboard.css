@@ -1,0 +1,222 @@
+/* ================================
+   DASHBOARD PAGE STYLES
+   Sistema de Gestión Comercial
+   ================================ */
+
+.dashboard .page-content-inner {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+}
+
+/* Stats Grid */
+.dashboard-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-4);
+}
+
+/* Cash Status Card */
+.dashboard-cash-status {
+    grid-column: span 1;
+}
+
+.cash-status-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin-bottom: var(--space-3);
+}
+
+.cash-status-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-neutral-100);
+    color: var(--color-neutral-500);
+}
+
+.cash-status-icon[data-open="true"] {
+    background: var(--color-success-100);
+    color: var(--color-success-600);
+}
+
+.cash-status-info {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+}
+
+.cash-status-label {
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+}
+
+.cash-status-details {
+    font-size: var(--text-xs);
+    color: var(--text-tertiary);
+}
+
+.cash-status-details p {
+    margin: 0;
+}
+
+/* Payment Methods Grid */
+.payment-methods-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-4);
+}
+
+.payment-method-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-4);
+    background: var(--bg-secondary);
+    border-radius: var(--radius-lg);
+}
+
+.payment-method-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.payment-method-icon.cash {
+    background: var(--color-success-100);
+    color: var(--color-success-600);
+}
+
+.payment-method-icon.transfer {
+    background: var(--color-primary-100);
+    color: var(--color-primary-600);
+}
+
+.payment-method-icon.card {
+    background: var(--color-warning-100);
+    color: var(--color-warning-600);
+}
+
+.payment-method-icon.credit {
+    background: var(--color-danger-100);
+    color: var(--color-danger-600);
+}
+
+.payment-method-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.payment-method-label {
+    font-size: var(--text-xs);
+    color: var(--text-secondary);
+}
+
+.payment-method-value {
+    font-size: var(--text-lg);
+    font-weight: var(--font-semibold);
+    color: var(--text-primary);
+}
+
+/* Alerts Grid */
+.dashboard-alerts {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-4);
+}
+
+.alert-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+}
+
+.alert-list-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-2) 0;
+}
+
+.alert-list-name {
+    flex: 1;
+    font-size: var(--text-sm);
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Quick Actions */
+.quick-actions {
+    display: flex;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+}
+
+.quick-action {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-4) var(--space-6);
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-lg);
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    min-width: 100px;
+}
+
+.quick-action:hover:not(:disabled) {
+    background: var(--color-primary-50);
+    border-color: var(--color-primary-200);
+    color: var(--color-primary-700);
+}
+
+.quick-action:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.quick-action span {
+    font-size: var(--text-sm);
+    font-weight: var(--font-medium);
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+    .dashboard-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .payment-methods-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .dashboard-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .payment-methods-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .dashboard-alerts {
+        grid-template-columns: 1fr;
+    }
+
+    .quick-actions {
+        justify-content: center;
+    }
+}

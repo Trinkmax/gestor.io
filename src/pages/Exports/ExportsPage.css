@@ -1,0 +1,132 @@
+/* ================================
+   EXPORTS PAGE STYLES
+   Sistema de Gestión Comercial
+   ================================ */
+
+.exports-page .page-content-inner {
+    max-width: 1000px;
+}
+
+.exports-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-6);
+}
+
+/* Export Options */
+.export-options {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+}
+
+.export-option {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-4);
+    padding: var(--space-4);
+    background: var(--bg-secondary);
+    border: 2px solid var(--border-light);
+    border-radius: var(--radius-lg);
+    text-align: left;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.export-option:hover {
+    border-color: var(--border-medium);
+}
+
+.export-option.active {
+    border-color: var(--color-primary-500);
+    background: var(--color-primary-50);
+}
+
+.export-option-icon {
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-primary);
+    border-radius: var(--radius-lg);
+    color: var(--color-primary-600);
+}
+
+.export-option.active .export-option-icon {
+    background: var(--color-primary-100);
+}
+
+.export-option-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.export-option-title {
+    display: block;
+    font-weight: var(--font-semibold);
+    color: var(--text-primary);
+    margin-bottom: var(--space-1);
+}
+
+.export-option-desc {
+    display: block;
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+    line-height: var(--leading-relaxed);
+}
+
+/* Export Config */
+.export-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-4);
+    padding: var(--space-12);
+    text-align: center;
+    color: var(--text-tertiary);
+}
+
+.export-placeholder p {
+    margin: 0;
+}
+
+.export-config {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+}
+
+.export-config h3 {
+    font-size: var(--text-lg);
+    margin: 0 0 var(--space-2);
+}
+
+.export-date-range {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-4);
+}
+
+.export-success {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-3);
+    background: var(--color-success-50);
+    border-radius: var(--radius-md);
+    font-size: var(--text-sm);
+    color: var(--color-success-700);
+}
+
+@media (max-width: 768px) {
+    .exports-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .export-date-range {
+        grid-template-columns: 1fr;
+    }
+}

@@ -1,0 +1,29 @@
+/* ================================
+   SETTINGS PAGE STYLES
+   Sistema de Gestión Comercial
+   ================================ */
+
+.settings-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-6);
+    max-width: 1000px;
+}
+
+.settings-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+}
+
+.settings-toggles {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+}
+
+@media (max-width: 1024px) {
+    .settings-grid {
+        grid-template-columns: 1fr;
+    }
+}

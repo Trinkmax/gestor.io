@@ -1,0 +1,138 @@
+/* ================================
+   ACCOUNT PAGE STYLES
+   Sistema de Gestión Comercial
+   ================================ */
+
+.account-page .page-content-inner {
+    max-width: 700px;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+}
+
+/* User Info */
+.account-user-info {
+    display: flex;
+    align-items: center;
+    gap: var(--space-5);
+}
+
+.account-avatar {
+    width: 72px;
+    height: 72px;
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: var(--text-xl);
+    font-weight: var(--font-bold);
+}
+
+.account-details {
+    flex: 1;
+}
+
+.account-name {
+    font-size: var(--text-xl);
+    font-weight: var(--font-semibold);
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.account-email {
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+    margin: var(--space-1) 0 var(--space-2);
+}
+
+.account-role-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--radius-full);
+    font-size: var(--text-sm);
+    font-weight: var(--font-medium);
+}
+
+/* Role Selector */
+.role-selector {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+}
+
+.role-option {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-2);
+    padding: var(--space-4);
+    background: var(--bg-secondary);
+    border: 2px solid var(--border-light);
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    text-align: left;
+    width: 100%;
+}
+
+.role-option:hover {
+    border-color: var(--color-primary-300);
+    background: var(--color-primary-50);
+}
+
+.role-option.active {
+    border-color: var(--color-primary-500);
+    background: var(--color-primary-50);
+}
+
+.role-option-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    color: var(--text-primary);
+}
+
+.role-option-name {
+    font-weight: var(--font-semibold);
+}
+
+.role-option-current {
+    margin-left: auto;
+    font-size: var(--text-xs);
+    color: var(--color-primary-600);
+    background: var(--color-primary-100);
+    padding: 2px var(--space-2);
+    border-radius: var(--radius-full);
+}
+
+.role-option-description {
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+    margin: 0;
+    line-height: var(--leading-relaxed);
+}
+
+/* Actions */
+.account-actions {
+    display: flex;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+    .account-user-info {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .account-actions {
+        flex-direction: column;
+    }
+
+    .account-actions .btn {
+        width: 100%;
+    }
+}

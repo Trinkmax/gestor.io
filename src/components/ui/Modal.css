@@ -1,0 +1,285 @@
+/* ================================
+   MODAL & DIALOG STYLES
+   Sistema de Gestión Comercial
+   ================================ */
+
+/* Modal backdrop */
+.modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: var(--z-modal-backdrop);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-4);
+    animation: backdrop-in 0.2s ease;
+}
+
+.modal-backdrop.exiting {
+    animation: backdrop-out 0.15s ease forwards;
+}
+
+@keyframes backdrop-in {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes backdrop-out {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
+}
+
+/* Modal container */
+.modal {
+    background: var(--bg-primary);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-xl);
+    max-width: 500px;
+    width: 100%;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    animation: modal-in 0.2s ease;
+    z-index: var(--z-modal);
+}
+
+.modal-backdrop.exiting .modal {
+    animation: modal-out 0.15s ease forwards;
+}
+
+@keyframes modal-in {
+    from {
+        transform: scale(0.95) translateY(-10px);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1) translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes modal-out {
+    from {
+        transform: scale(1) translateY(0);
+        opacity: 1;
+    }
+
+    to {
+        transform: scale(0.95) translateY(-10px);
+        opacity: 0;
+    }
+}
+
+/* Modal sizes */
+.modal-sm {
+    max-width: 400px;
+}
+
+.modal-lg {
+    max-width: 700px;
+}
+
+.modal-xl {
+    max-width: 900px;
+}
+
+.modal-full {
+    max-width: calc(100vw - 32px);
+    max-height: calc(100vh - 32px);
+}
+
+/* Modal header */
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-5) var(--space-6);
+    border-bottom: 1px solid var(--border-light);
+}
+
+.modal-title {
+    font-size: var(--text-lg);
+    font-weight: var(--font-semibold);
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.modal-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-md);
+    color: var(--text-tertiary);
+    transition: all var(--transition-fast);
+}
+
+.modal-close:hover {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+}
+
+/* Modal body */
+.modal-body {
+    padding: var(--space-6);
+    overflow-y: auto;
+    flex: 1;
+}
+
+/* Modal footer */
+.modal-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--space-3);
+    padding: var(--space-4) var(--space-6);
+    border-top: 1px solid var(--border-light);
+    background: var(--bg-secondary);
+    border-radius: 0 0 var(--radius-xl) var(--radius-xl);
+}
+
+/* Confirm dialog specific */
+.confirm-dialog .modal-body {
+    padding: var(--space-6);
+}
+
+.confirm-dialog-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto var(--space-4);
+}
+
+.confirm-dialog-icon.danger {
+    background: var(--color-danger-100);
+    color: var(--color-danger-600);
+}
+
+.confirm-dialog-icon.warning {
+    background: var(--color-warning-100);
+    color: var(--color-warning-600);
+}
+
+.confirm-dialog-icon.default {
+    background: var(--color-primary-100);
+    color: var(--color-primary-600);
+}
+
+.confirm-dialog-title {
+    font-size: var(--text-lg);
+    font-weight: var(--font-semibold);
+    color: var(--text-primary);
+    text-align: center;
+    margin: 0 0 var(--space-2);
+}
+
+.confirm-dialog-message {
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+    text-align: center;
+    margin: 0;
+}
+
+.confirm-dialog .modal-footer {
+    justify-content: center;
+}
+
+/* Drawer (slide from right) */
+.drawer-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: var(--z-modal-backdrop);
+    animation: backdrop-in 0.2s ease;
+}
+
+.drawer {
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 100vh;
+    background: var(--bg-primary);
+    width: 450px;
+    max-width: 100vw;
+    box-shadow: var(--shadow-xl);
+    display: flex;
+    flex-direction: column;
+    z-index: var(--z-modal);
+    animation: drawer-in 0.3s ease;
+}
+
+.drawer-backdrop.exiting .drawer {
+    animation: drawer-out 0.2s ease forwards;
+}
+
+@keyframes drawer-in {
+    from {
+        transform: translateX(100%);
+    }
+
+    to {
+        transform: translateX(0);
+    }
+}
+
+@keyframes drawer-out {
+    from {
+        transform: translateX(0);
+    }
+
+    to {
+        transform: translateX(100%);
+    }
+}
+
+.drawer-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-5) var(--space-6);
+    border-bottom: 1px solid var(--border-light);
+}
+
+.drawer-title {
+    font-size: var(--text-lg);
+    font-weight: var(--font-semibold);
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.drawer-body {
+    flex: 1;
+    padding: var(--space-6);
+    overflow-y: auto;
+}
+
+.drawer-footer {
+    padding: var(--space-4) var(--space-6);
+    border-top: 1px solid var(--border-light);
+    background: var(--bg-secondary);
+    display: flex;
+    gap: var(--space-3);
+    justify-content: flex-end;
+}
+
+@media (max-width: 768px) {
+    .drawer {
+        width: 100vw;
+    }
+}
