@@ -10,7 +10,7 @@ interface CategoryBadgeProps {
     categoryColor?: string;
     size?: 'sm' | 'md';
     showIcon?: boolean;
-    onClick?: () => void;
+    onClick?: (e: React.MouseEvent) => void;
 }
 
 export function CategoryBadge({

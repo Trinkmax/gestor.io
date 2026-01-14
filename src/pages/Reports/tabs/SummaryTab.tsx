@@ -6,7 +6,7 @@
 import { DollarSign, ShoppingCart, TrendingUp, Users } from 'lucide-react';
 import { Card, CardHeader, CardBody } from '../../../components/ui';
 import { formatCurrency } from '../../../mocks/generators';
-import { CompactKPI, KPIGrid } from '../components/CompactKPI';
+import { CompactKPI } from '../components/CompactKPI';
 import { TimeSeriesChart, StackedAreaChart, HeatmapChart, RankingChart, COLORS } from '../components/ReportCharts';
 import { InsightsPanel } from '../components/InsightsPanel';
 import type { useReportsData } from '../hooks/useReportsData';

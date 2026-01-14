@@ -16,8 +16,7 @@ import {
     YAxis,
     CartesianGrid,
     Tooltip,
-    Legend,
-    Cell
+    Legend
 } from 'recharts';
 import { formatCurrency } from '../../../mocks/generators';
 import './ReportCharts.css';

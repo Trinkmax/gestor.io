@@ -4,7 +4,7 @@
 // ================================
 
 import { useState } from 'react';
-import { ChevronDown, ChevronUp, X } from 'lucide-react';
+import { ChevronDown, ChevronUp } from 'lucide-react';
 import { Button, Input } from '../../../components/ui';
 import { CategoryBadge } from './CategoryBadge';
 import type { Category } from '../../../types';

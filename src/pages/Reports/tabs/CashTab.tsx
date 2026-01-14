@@ -7,7 +7,7 @@ import { useState } from 'react';
 import { DollarSign, Wallet, AlertTriangle, TrendingDown } from 'lucide-react';
 import { Card, CardHeader, CardBody, Table, Badge, Button } from '../../../components/ui';
 import { formatCurrency, formatDate, expenseCategoryNames } from '../../../mocks/generators';
-import { CompactKPI, KPIGrid } from '../components/CompactKPI';
+import { CompactKPI } from '../components/CompactKPI';
 import { TimeSeriesChart, SimpleBarChart, COLORS } from '../components/ReportCharts';
 import { DetailDrawer } from '../components/DetailDrawer';
 import type { useReportsData } from '../hooks/useReportsData';

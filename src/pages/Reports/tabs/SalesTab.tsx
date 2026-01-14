@@ -7,7 +7,7 @@ import { useState } from 'react';
 import { DollarSign, ShoppingCart, TrendingUp, Receipt } from 'lucide-react';
 import { Card, CardHeader, CardBody, Table, Badge } from '../../../components/ui';
 import { formatCurrency } from '../../../mocks/generators';
-import { CompactKPI, KPIGrid } from '../components/CompactKPI';
+import { CompactKPI } from '../components/CompactKPI';
 import { TimeSeriesChart, HistogramChart, COLORS } from '../components/ReportCharts';
 import { DetailDrawer } from '../components/DetailDrawer';
 import type { useReportsData } from '../hooks/useReportsData';
@@ -29,7 +29,7 @@ interface PaymentDataRow {
 export function SalesTab({ data }: SalesTabProps) {
     const { kpis, timeSeriesData, ticketDistribution, filters } = data;
     const [showSalesDrawer, setShowSalesDrawer] = useState(false);
-    const [drawerDate, setDrawerDate] = useState<string | null>(null);
+    const [drawerDate] = useState<string | null>(null);
     
     if (!kpis) return null;
     

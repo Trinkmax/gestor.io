@@ -4,8 +4,8 @@
 // ================================
 
 import { useState, useRef } from 'react';
-import { X, Upload, FileText, CheckCircle, AlertTriangle } from 'lucide-react';
-import { Button, Modal, Input } from '../../../components/ui';
+import { Upload, FileText, CheckCircle, AlertTriangle } from 'lucide-react';
+import { Button, Modal } from '../../../components/ui';
 import { useUI } from '../../../contexts/UIContext';
 import type { Category } from '../../../types';
 
@@ -46,7 +46,6 @@ const EXPECTED_COLUMNS = [
 export function ImportWizard({ isOpen, onClose, categories, onImport }: ImportWizardProps) {
     const { showToast } = useUI();
     const [step, setStep] = useState<1 | 2 | 3>(1);
-    const [file, setFile] = useState<File | null>(null);
     const [parsedData, setParsedData] = useState<ParsedData | null>(null);
     const [columnMapping, setColumnMapping] = useState<Record<string, number>>({});
     const [previewData, setPreviewData] = useState<ImportRow[]>([]);
@@ -62,8 +61,6 @@ export function ImportWizard({ isOpen, onClose, categories, onImport }: ImportWi
             showToast('warning', 'El archivo debe ser CSV');
             return;
         }
-
-        setFile(selectedFile);
 
         // Parse CSV
         const reader = new FileReader();
@@ -153,7 +150,6 @@ export function ImportWizard({ isOpen, onClose, categories, onImport }: ImportWi
 
     const handleClose = () => {
         setStep(1);
-        setFile(null);
         setParsedData(null);
         setColumnMapping({});
         setPreviewData([]);

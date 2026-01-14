@@ -3,7 +3,7 @@
 // Main analytics page with tabs
 // ================================
 
-import { useState, Suspense } from 'react';
+import { useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import {
     BarChart3,
@@ -14,10 +14,9 @@ import {
     ShoppingCart,
     Wallet,
     Package,
-    Users,
-    Loader2
+    Users
 } from 'lucide-react';
-import { Button, Badge } from '../../components/ui';
+import { Button } from '../../components/ui';
 import { PermissionGate } from '../../components/ui/PermissionGate';
 import { Skeleton } from '../../components/ui/Skeleton';
 import { useReportsData } from './hooks/useReportsData';

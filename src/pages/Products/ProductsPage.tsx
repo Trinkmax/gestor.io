@@ -3,7 +3,7 @@
 // Sistema de Gestión Comercial
 // ================================
 
-import { useState, useMemo, useEffect, useCallback } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import {
     Package,
     Plus,
@@ -11,7 +11,6 @@ import {
     Download,
     Upload,
     Tag,
-    MoreVertical,
     Eye,
     X,
     Layers,
@@ -21,7 +20,7 @@ import { useUI } from '../../contexts/UIContext';
 import { Card, CardBody, Button, Badge, Input, Modal, FilterPill } from '../../components/ui';
 import { PermissionGate } from '../../components/ui/PermissionGate';
 import { formatCurrency } from '../../mocks/generators';
-import { mockProducts, mockCategories, getLowStockProducts } from '../../mocks/data/products';
+import { mockProducts, mockCategories } from '../../mocks/data/products';
 import type { Product, Category } from '../../types';
 import {
     CategoryBadge,
@@ -617,9 +616,6 @@ export function ProductsPage() {
         return () => window.removeEventListener('keydown', handleKeyDown);
     }, [focusedProductId, products, filteredProducts, canEdit, detailProduct, quickEditProduct]);
 
-    const isLowStock = (product: Product) =>
-        product.isActive && product.minStock !== undefined && product.stock <= product.minStock;
-
     const allSelected = filteredProducts.length > 0 && filteredProducts.every(p => selectedIds.has(p.id));
     const someSelected = filteredProducts.some(p => selectedIds.has(p.id));
 
@@ -875,8 +871,9 @@ export function ProductsPage() {
                                                             <CategoryBadge
                                                                 categoryName={category?.name}
                                                                 categoryColor={category?.color}
-                                                                onClick={(e) => {
-                                                                    handleQuickEditCategory(product, e.target as HTMLElement);
+                                                                onClick={(e: React.MouseEvent) => {
+                                                                    e.stopPropagation();
+                                                                    handleQuickEditCategory(product, e.currentTarget as HTMLElement);
                                                                 }}
                                                             />
                                                         </td>

@@ -6,8 +6,6 @@
 import { useState, useRef, useEffect } from 'react';
 import {
     Calendar,
-    ChevronDown,
-    ChevronUp,
     RotateCcw,
     Copy,
     Check,
@@ -178,7 +176,6 @@ export function ReportFilterBar({ filters, onFiltersChange, onReset, dateRange }
                         label="Comparar período"
                         checked={filters.compareEnabled}
                         onChange={checked => onFiltersChange({ compareEnabled: checked })}
-                        size="sm"
                     />
                 </div>
                 
