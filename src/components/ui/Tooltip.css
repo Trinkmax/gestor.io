@@ -1,0 +1,61 @@
+/* ================================
+   TOOLTIP STYLES
+   Sistema de Gestión Comercial
+   ================================ */
+
+.tooltip-trigger {
+    display: inline-flex;
+}
+
+.tooltip {
+    position: fixed;
+    transform: translateX(-50%);
+    padding: var(--space-2) var(--space-3);
+    background: var(--color-neutral-800);
+    color: var(--text-inverse);
+    font-size: var(--text-xs);
+    font-weight: var(--font-medium);
+    border-radius: var(--radius-md);
+    white-space: nowrap;
+    z-index: var(--z-toast);
+    pointer-events: none;
+    animation: tooltip-fade-in 0.15s ease;
+}
+
+@keyframes tooltip-fade-in {
+    from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(4px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+}
+
+.tooltip-top {
+    transform: translateX(-50%) translateY(-100%);
+}
+
+.tooltip-bottom {
+    transform: translateX(-50%);
+}
+
+/* Arrow */
+.tooltip::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+}
+
+.tooltip-top::after {
+    bottom: -10px;
+    border-top-color: var(--color-neutral-800);
+}
+
+.tooltip-bottom::after {
+    top: -10px;
+    border-bottom-color: var(--color-neutral-800);
+}

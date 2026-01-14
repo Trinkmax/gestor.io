@@ -1,0 +1,599 @@
+/* ================================
+   REPORT CHARTS STYLES - 2026 PREMIUM
+   ================================ */
+
+.chart-container {
+    width: 100%;
+    min-height: 200px;
+    padding: var(--space-1);
+    position: relative;
+}
+
+/* Custom Tooltip - Glassmorphism */
+.chart-tooltip {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    border-radius: var(--radius-xl);
+    padding: var(--space-4);
+    box-shadow: 
+        0 12px 32px -8px rgba(0, 0, 0, 0.15),
+        0 0 1px 0 rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 0 rgba(255, 255, 255, 0.8);
+    min-width: 180px;
+    animation: tooltipFadeIn 0.2s ease-out;
+}
+
+@keyframes tooltipFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.chart-tooltip-label {
+    font-size: var(--text-sm);
+    font-weight: var(--font-bold);
+    color: var(--text-primary);
+    margin-bottom: var(--space-3);
+    padding-bottom: var(--space-3);
+    border-bottom: 2px solid var(--color-primary-100);
+    letter-spacing: -0.01em;
+}
+
+.chart-tooltip-item {
+    font-size: var(--text-sm);
+    font-weight: var(--font-medium);
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-2) 0;
+    transition: transform 0.2s ease;
+}
+
+.chart-tooltip-item:hover {
+    transform: translateX(4px);
+}
+
+.chart-tooltip-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: var(--radius-full);
+    flex-shrink: 0;
+    box-shadow: 0 2px 6px -2px currentColor;
+}
+
+/* Ranking Chart - Premium 2026 Optimizado */
+.ranking-chart {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    overflow-y: auto;
+    padding: var(--space-1) var(--space-2);
+    height: 100%;
+    min-height: 0;
+}
+
+.ranking-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-lg);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    background: linear-gradient(135deg, 
+        rgba(255, 255, 255, 0.5), 
+        rgba(248, 250, 252, 0.3));
+    border: 1px solid transparent;
+}
+
+.ranking-item:hover {
+    background: linear-gradient(135deg, 
+        rgba(255, 255, 255, 0.9), 
+        rgba(248, 250, 252, 0.7));
+    border-color: rgba(59, 130, 246, 0.2);
+    transform: translateX(4px);
+    box-shadow: 
+        0 4px 12px -4px rgba(0, 0, 0, 0.08),
+        0 2px 8px -2px rgba(59, 130, 246, 0.1);
+}
+
+.ranking-position {
+    width: 28px;
+    height: 28px;
+    border-radius: var(--radius-full);
+    background: var(--bg-tertiary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--text-xs);
+    font-weight: var(--font-bold);
+    color: var(--text-secondary);
+    flex-shrink: 0;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px -2px rgba(0, 0, 0, 0.1);
+}
+
+.ranking-item:hover .ranking-position {
+    transform: scale(1.1) rotate(-5deg);
+}
+
+.ranking-item:nth-child(1) .ranking-position {
+    background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+    color: white;
+    box-shadow: 
+        0 4px 12px -2px rgba(251, 191, 36, 0.5),
+        inset 0 1px 0 0 rgba(255, 255, 255, 0.3);
+    animation: shimmerGold 3s infinite;
+}
+
+@keyframes shimmerGold {
+    0%, 100% { filter: brightness(1); }
+    50% { filter: brightness(1.15); }
+}
+
+.ranking-item:nth-child(2) .ranking-position {
+    background: linear-gradient(135deg, #cbd5e1 0%, #94a3b8 100%);
+    color: white;
+    box-shadow: 
+        0 4px 12px -2px rgba(148, 163, 184, 0.5),
+        inset 0 1px 0 0 rgba(255, 255, 255, 0.3);
+}
+
+.ranking-item:nth-child(3) .ranking-position {
+    background: linear-gradient(135deg, #f97316 0%, #c2410c 100%);
+    color: white;
+    box-shadow: 
+        0 4px 12px -2px rgba(249, 115, 22, 0.5),
+        inset 0 1px 0 0 rgba(255, 255, 255, 0.3);
+}
+
+.ranking-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.ranking-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: var(--space-2);
+    gap: var(--space-3);
+}
+
+.ranking-name {
+    font-size: var(--text-sm);
+    font-weight: var(--font-semibold);
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex: 1;
+    letter-spacing: -0.01em;
+}
+
+.ranking-value {
+    font-size: var(--text-sm);
+    font-weight: var(--font-bold);
+    color: var(--color-primary-600);
+    white-space: nowrap;
+}
+
+.ranking-bar-bg {
+    height: 8px;
+    background: linear-gradient(135deg, 
+        var(--bg-tertiary), 
+        var(--color-neutral-100));
+    border-radius: var(--radius-full);
+    overflow: hidden;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.ranking-bar-fill {
+    height: 100%;
+    border-radius: var(--radius-full);
+    transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.ranking-bar-fill::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 50%;
+    background: linear-gradient(to bottom, 
+        rgba(255, 255, 255, 0.3), 
+        transparent);
+    border-radius: var(--radius-full) var(--radius-full) 0 0;
+}
+
+/* Heatmap Chart - Optimizado sin desperdicio */
+.heatmap-chart {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    padding: var(--space-1);
+    height: 100%;
+    justify-content: center;
+}
+
+.heatmap-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: var(--space-2);
+    background: linear-gradient(135deg, 
+        rgba(248, 250, 252, 0.5), 
+        rgba(241, 245, 249, 0.3));
+    border-radius: var(--radius-lg);
+}
+
+.heatmap-row {
+    display: flex;
+    gap: 2px;
+}
+
+.heatmap-cell {
+    flex-shrink: 0;
+}
+
+.heatmap-label {
+    width: 36px;
+    font-size: 10px;
+    font-weight: var(--font-bold);
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    letter-spacing: 0.01em;
+}
+
+.heatmap-hour-label {
+    width: 28px;
+    font-size: 9px;
+    font-weight: var(--font-semibold);
+    color: var(--text-tertiary);
+    text-align: center;
+}
+
+.heatmap-data {
+    width: 28px;
+    height: 22px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.heatmap-data:hover {
+    transform: scale(1.15);
+    z-index: 10;
+    box-shadow: 
+        0 4px 12px -2px rgba(59, 130, 246, 0.4),
+        inset 0 1px 2px rgba(255, 255, 255, 0.3);
+    border-color: rgba(59, 130, 246, 0.5);
+}
+
+.heatmap-legend {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    justify-content: center;
+    font-size: 10px;
+    font-weight: var(--font-semibold);
+    color: var(--text-secondary);
+    padding: var(--space-2);
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: var(--radius-lg);
+}
+
+.heatmap-legend-gradient {
+    width: 120px;
+    height: 8px;
+    border-radius: var(--radius-full);
+    background: linear-gradient(to right, 
+        rgba(59, 130, 246, 0.1),
+        rgba(59, 130, 246, 0.4),
+        rgba(59, 130, 246, 0.7),
+        rgba(59, 130, 246, 1)
+    );
+    box-shadow: 
+        0 2px 8px -2px rgba(59, 130, 246, 0.3),
+        inset 0 1px 2px rgba(255, 255, 255, 0.3);
+    border: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+/* Histogram Chart - Modern Design Optimizado */
+.histogram-chart {
+    display: flex;
+    flex-direction: column;
+    padding: var(--space-2);
+}
+
+.histogram-bars {
+    display: flex;
+    align-items: flex-end;
+    gap: var(--space-2);
+    flex: 1;
+    padding: var(--space-2);
+    padding-bottom: var(--space-4);
+    background: linear-gradient(to top, 
+        rgba(248, 250, 252, 0.5), 
+        transparent);
+    border-radius: var(--radius-lg);
+}
+
+.histogram-bar-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    transition: all 0.3s ease;
+}
+
+.histogram-bar-container:hover {
+    transform: translateY(-4px);
+}
+
+.histogram-bar {
+    width: 100%;
+    max-width: 64px;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: var(--space-2);
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    min-height: 24px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 
+        0 4px 12px -4px rgba(0, 0, 0, 0.2),
+        inset 0 1px 2px rgba(255, 255, 255, 0.3);
+}
+
+.histogram-bar::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 40%;
+    background: linear-gradient(to bottom, 
+        rgba(255, 255, 255, 0.3), 
+        transparent);
+}
+
+.histogram-count {
+    font-size: var(--text-xs);
+    font-weight: var(--font-bold);
+    color: white;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    position: relative;
+    z-index: 1;
+}
+
+.histogram-label {
+    font-size: var(--text-xs);
+    font-weight: var(--font-semibold);
+    color: var(--text-secondary);
+    margin-top: var(--space-2);
+    text-align: center;
+    letter-spacing: 0.01em;
+}
+
+/* Chart Card - Enhanced */
+.chart-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+}
+
+.chart-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: var(--space-3);
+    border-bottom: 2px solid var(--color-primary-100);
+}
+
+.chart-card-title {
+    font-size: var(--text-lg);
+    font-weight: var(--font-bold);
+    color: var(--text-primary);
+    letter-spacing: -0.01em;
+}
+
+.chart-card-subtitle {
+    font-size: var(--text-sm);
+    color: var(--text-tertiary);
+    font-weight: var(--font-medium);
+    margin-top: var(--space-1);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .chart-container {
+        min-height: 180px;
+        padding: 0;
+    }
+    
+    .chart-tooltip {
+        padding: var(--space-3);
+        min-width: 150px;
+    }
+    
+    .chart-tooltip-label {
+        font-size: var(--text-xs);
+        margin-bottom: var(--space-2);
+        padding-bottom: var(--space-2);
+    }
+    
+    .chart-tooltip-item {
+        font-size: var(--text-xs);
+        padding: var(--space-1) 0;
+    }
+    
+    .ranking-chart {
+        gap: var(--space-1);
+        padding: var(--space-1);
+    }
+    
+    .ranking-item {
+        padding: var(--space-2);
+        gap: var(--space-2);
+    }
+    
+    .ranking-position {
+        width: 24px;
+        height: 24px;
+        font-size: 10px;
+    }
+    
+    .ranking-name {
+        font-size: var(--text-xs);
+    }
+    
+    .ranking-value {
+        font-size: var(--text-xs);
+    }
+    
+    .ranking-bar-bg {
+        height: 6px;
+    }
+    
+    .heatmap-grid {
+        padding: var(--space-1);
+        gap: 1px;
+    }
+    
+    .heatmap-row {
+        gap: 1px;
+    }
+    
+    .heatmap-label {
+        width: 28px;
+        font-size: 9px;
+    }
+    
+    .heatmap-hour-label {
+        width: 20px;
+        font-size: 8px;
+    }
+    
+    .heatmap-data {
+        width: 20px;
+        height: 18px;
+    }
+    
+    .heatmap-legend {
+        font-size: 9px;
+        padding: var(--space-1);
+    }
+    
+    .heatmap-legend-gradient {
+        width: 80px;
+        height: 6px;
+    }
+    
+    .histogram-bars {
+        gap: var(--space-1);
+        padding: var(--space-1);
+        padding-bottom: var(--space-3);
+    }
+    
+    .histogram-bar {
+        max-width: 48px;
+        padding-top: var(--space-1);
+    }
+    
+    .histogram-count {
+        font-size: 10px;
+    }
+    
+    .histogram-label {
+        font-size: 10px;
+        margin-top: var(--space-1);
+    }
+    
+    .chart-card-header {
+        padding-bottom: var(--space-2);
+    }
+    
+    .chart-card-title {
+        font-size: var(--text-base);
+    }
+    
+    .chart-card-subtitle {
+        font-size: var(--text-xs);
+    }
+}
+
+@media (max-width: 480px) {
+    .chart-container {
+        min-height: 150px;
+    }
+    
+    .ranking-chart {
+        font-size: var(--text-xs);
+    }
+    
+    .ranking-position {
+        width: 20px;
+        height: 20px;
+        font-size: 9px;
+    }
+    
+    .ranking-header {
+        gap: var(--space-1);
+        margin-bottom: var(--space-1);
+    }
+    
+    .heatmap-label {
+        width: 24px;
+        font-size: 8px;
+    }
+    
+    .heatmap-hour-label {
+        width: 16px;
+        font-size: 7px;
+    }
+    
+    .heatmap-data {
+        width: 16px;
+        height: 14px;
+    }
+    
+    .heatmap-legend {
+        font-size: 8px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .heatmap-legend-gradient {
+        width: 100%;
+        max-width: 100px;
+    }
+    
+    .histogram-bar {
+        max-width: 32px;
+    }
+    
+    .histogram-count {
+        font-size: 9px;
+    }
+    
+    .histogram-label {
+        font-size: 9px;
+    }
+}

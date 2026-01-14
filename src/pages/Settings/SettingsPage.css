@@ -27,3 +27,23 @@
         grid-template-columns: 1fr;
     }
 }
+
+@media (max-width: 768px) {
+    .settings-grid {
+        gap: var(--space-4);
+    }
+    
+    .settings-form {
+        gap: var(--space-3);
+    }
+    
+    .settings-toggles {
+        gap: var(--space-3);
+    }
+}
+
+@media (max-width: 480px) {
+    .settings-grid {
+        gap: var(--space-3);
+    }
+}

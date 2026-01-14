@@ -1,0 +1,38 @@
+nombre,codigo,precio,costo,stock,minimo,categoria,activo
+Coca Cola 3L,7790895000099,3200,2400,15,8,Bebidas,si
+Sprite 2.25L,7790895000027,2400,1750,20,10,Bebidas,si
+Fanta 2.25L,7790895000034,2400,1750,18,10,Bebidas,si
+Agua Mineral Villavicencio 2L,7792799000028,950,600,40,20,Bebidas,si
+Cerveza Brahma 1L,7790315000029,1650,1100,60,25,Bebidas,si
+Vino Tinto Trapiche 750ml,7790040000026,4500,3200,12,6,Bebidas,si
+Fideos Marolio 500g,7790070000026,850,580,50,20,Alimentos,si
+Arroz Molinos Ala 1kg,7790310000022,1350,920,35,15,Alimentos,si
+Aceite Natura 1.5L,7790580000025,3100,2350,18,8,Alimentos,si
+Sal Fina Celusal 500g,7790250000022,320,210,25,10,Alimentos,si
+Azúcar Chango 1kg,7790210000021,1050,720,30,12,Alimentos,si
+Harina 0000 Cañuelas 1kg,7790387000024,950,640,28,12,Alimentos,si
+Yerba Playadito 1kg,7790387000031,4200,3050,25,10,Alimentos,si
+Café Torrado La Virginia 500g,7790742000035,2800,1950,15,8,Alimentos,si
+Leche Larga Vida Sancor 1L,7790742000042,1350,960,40,20,Lácteos,si
+Yogur Casero La Serenísima 1L,7790742000059,1650,1150,22,10,Lácteos,si
+Manteca La Serenísima 200g,7790200000037,1850,1320,18,8,Lácteos,si
+Queso Cremoso Casancrem 250g,7790200000044,2950,2100,12,6,Lácteos,si
+Dulce de Leche Sancor 400g,7790387000048,2450,1750,20,10,Lácteos,si
+Lavandina Ala 1L,7790250000039,680,420,35,15,Limpieza,si
+Detergente Ala 750ml,7501007490021,1550,1050,25,12,Limpieza,si
+Jabón en Polvo Omo 800g,7791290000023,2950,2100,15,8,Limpieza,si
+Esponja Virulana x3,7790580000032,850,580,40,20,Limpieza,si
+Papel Higiénico Elite x4,7790040000033,1650,1150,30,15,Limpieza,si
+Marlboro Red Box 20,7791000000031,3650,3050,40,15,Cigarrillos,si
+Philip Morris Box 20,7791000000048,3450,2880,35,12,Cigarrillos,si
+Lucky Strike Box 20,7791000000055,3250,2720,30,10,Cigarrillos,si
+Pan Lactal Fargo 500g,7790040000040,1950,1380,20,8,Panadería,si
+Galletitas Sonrisas Bagley 400g,7622300000037,1450,1020,35,15,Panadería,si
+Tostadas Criollitas x120,7790040000057,950,660,25,10,Panadería,si
+Chocolate Milka Oreo 100g,7622300000044,2050,1450,28,12,Golosinas,si
+Alfajor Jorgito x6,7790895000058,1850,1300,40,18,Golosinas,si
+Caramelos Sugus x100g,7790580000049,680,450,50,25,Golosinas,si
+Chicles Topline x10,7790580000056,420,280,60,30,Golosinas,si
+Papas Fritas Lays 170g,7790310000039,1750,1220,22,10,Snacks,si
+Palitos Pehuamar 100g,7790040000064,850,590,35,15,Snacks,si
+Maní Salado 150g,7790387000055,680,450,40,20,Snacks,si

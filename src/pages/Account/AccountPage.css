@@ -123,9 +123,24 @@
 }
 
 @media (max-width: 768px) {
+    .account-page .page-content-inner {
+        gap: var(--space-4);
+    }
+    
     .account-user-info {
         flex-direction: column;
         text-align: center;
+        gap: var(--space-3);
+    }
+    
+    .account-avatar {
+        width: 64px;
+        height: 64px;
+        font-size: var(--text-lg);
+    }
+    
+    .account-name {
+        font-size: var(--text-lg);
     }
 
     .account-actions {
@@ -134,5 +149,38 @@
 
     .account-actions .btn {
         width: 100%;
+    }
+    
+    .role-option {
+        padding: var(--space-3);
+    }
+    
+    .role-option-description {
+        font-size: var(--text-xs);
+    }
+}
+
+@media (max-width: 480px) {
+    .account-page .page-content-inner {
+        gap: var(--space-3);
+    }
+    
+    .account-avatar {
+        width: 56px;
+        height: 56px;
+        font-size: var(--text-base);
+    }
+    
+    .account-name {
+        font-size: var(--text-base);
+    }
+    
+    .account-email {
+        font-size: var(--text-xs);
+    }
+    
+    .account-role-badge {
+        font-size: var(--text-xs);
+        padding: 2px var(--space-2);
     }
 }

@@ -117,6 +117,14 @@
   --header-height: 64px;
   --content-max-width: 1400px;
   
+  /* ========== BREAKPOINTS ========== */
+  --breakpoint-xs: 480px;
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1536px;
+  
   /* ========== BORDERS & RADIUS ========== */
   --radius-sm: 0.25rem;  /* 4px */
   --radius-md: 0.5rem;   /* 8px */
@@ -124,11 +132,18 @@
   --radius-xl: 1rem;     /* 16px */
   --radius-full: 9999px;
   
-  /* ========== SHADOWS ========== */
+  /* ========== SHADOWS - Enhanced 2026 ========== */
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
   --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
   --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
   --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+  
+  /* Premium shadows with color tints */
+  --shadow-primary: 0 8px 24px -8px rgba(59, 130, 246, 0.3);
+  --shadow-success: 0 8px 24px -8px rgba(34, 197, 94, 0.3);
+  --shadow-warning: 0 8px 24px -8px rgba(245, 158, 11, 0.3);
+  --shadow-danger: 0 8px 24px -8px rgba(239, 68, 68, 0.3);
   
   /* ========== TRANSITIONS ========== */
   --transition-fast: 150ms ease;
@@ -141,6 +156,15 @@
   --z-modal-backdrop: 300;
   --z-modal: 400;
   --z-toast: 500;
+  
+  /* ========== FOCUS & ACCESSIBILITY ========== */
+  --focus-ring-color: rgba(59, 130, 246, 0.5);
+  --focus-ring-width: 3px;
+  --focus-ring-offset: 2px;
+  
+  /* ========== SKELETON ANIMATION ========== */
+  --skeleton-base: var(--color-neutral-200);
+  --skeleton-shine: var(--color-neutral-100);
 }
 
 /* Dark mode (for future) */

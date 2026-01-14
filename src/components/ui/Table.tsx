@@ -21,10 +21,13 @@ export interface TableProps<T> {
     keyExtractor: (item: T) => string;
     onRowClick?: (item: T) => void;
     isLoading?: boolean;
+    stickyHeader?: boolean;
     emptyTitle?: string;
     emptyMessage?: string;
     emptyAction?: React.ReactNode;
+    emptyIcon?: React.ReactNode;
 }
+
 
 export function Table<T>({
     columns,
@@ -32,14 +35,22 @@ export function Table<T>({
     keyExtractor,
     onRowClick,
     isLoading,
+    stickyHeader = false,
     emptyTitle = 'No hay datos',
     emptyMessage = 'No se encontraron registros para mostrar.',
     emptyAction,
+    emptyIcon,
 }: TableProps<T>) {
+    const tableClasses = [
+        'table',
+        onRowClick ? 'table-clickable' : '',
+        stickyHeader ? 'table-sticky' : '',
+    ].filter(Boolean).join(' ');
+
     if (isLoading) {
         return (
             <div className="table-container">
-                <table className="table">
+                <table className={tableClasses}>
                     <thead>
                         <tr>
                             {columns.map(col => (
@@ -66,7 +77,7 @@ export function Table<T>({
     if (data.length === 0) {
         return (
             <div className="table-empty">
-                <Package size={48} className="table-empty-icon" />
+                {emptyIcon || <Package size={48} className="table-empty-icon" />}
                 <h3 className="table-empty-title">{emptyTitle}</h3>
                 <p className="table-empty-message">{emptyMessage}</p>
                 {emptyAction}
@@ -76,7 +87,7 @@ export function Table<T>({
 
     return (
         <div className="table-container">
-            <table className={`table ${onRowClick ? 'table-clickable' : ''}`}>
+            <table className={tableClasses}>
                 <thead>
                     <tr>
                         {columns.map(col => (

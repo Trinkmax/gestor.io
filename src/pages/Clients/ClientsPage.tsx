@@ -273,18 +273,11 @@ export function ClientsPage() {
                                                 </td>
                                                 <td>
                                                     <div className="table-actions">
-                                                        <Button
-                                                            variant="ghost"
-                                                            size="sm"
-                                                            leftIcon={<ArrowRight size={14} />}
-                                                            onClick={() => viewAccount(client)}
-                                                        >
-                                                            Ver cuenta
-                                                        </Button>
+                                                        {/* Primary action: Cobrar for debtors */}
                                                         <PermissionGate permission="REGISTER_PAYMENT">
                                                             {client.balance > 0 && (
                                                                 <Button
-                                                                    variant="ghost"
+                                                                    variant="success"
                                                                     size="sm"
                                                                     leftIcon={<DollarSign size={14} />}
                                                                     onClick={() => openPaymentModal(client)}
@@ -293,6 +286,14 @@ export function ClientsPage() {
                                                                 </Button>
                                                             )}
                                                         </PermissionGate>
+                                                        <Button
+                                                            variant="ghost"
+                                                            size="sm"
+                                                            leftIcon={<ArrowRight size={14} />}
+                                                            onClick={() => viewAccount(client)}
+                                                        >
+                                                            Ver cuenta
+                                                        </Button>
                                                         {canEdit && (
                                                             <Button
                                                                 variant="ghost"

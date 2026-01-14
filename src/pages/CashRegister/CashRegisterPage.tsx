@@ -27,16 +27,20 @@ import type { ExpenseCategory } from '../../types';
 import './CashRegisterPage.css';
 
 type Tab = 'status' | 'expenses' | 'history';
+type CloseStep = 1 | 2 | 3; // 1: Count, 2: Review, 3: Confirm
 
 export function CashRegisterPage() {
     const navigate = useNavigate();
     const { hasPermission } = useAuth();
-    const { showToast, showConfirm } = useUI();
+    const { showToast } = useUI();
 
     const [activeTab, setActiveTab] = useState<Tab>('status');
     const [showOpenModal, setShowOpenModal] = useState(false);
     const [showExpenseModal, setShowExpenseModal] = useState(false);
     const [showCloseModal, setShowCloseModal] = useState(false);
+    
+    // NEW: Stepper state for guided close
+    const [closeStep, setCloseStep] = useState<CloseStep>(1);
 
     // Form states
     const [openAmount, setOpenAmount] = useState('');
@@ -93,32 +97,43 @@ export function CashRegisterPage() {
         setExpenseMethod('CASH');
     };
 
-    // Handle close cash register
-    const handleClose = () => {
-        const counted = parseFloat(closeAmount);
-        if (isNaN(counted) || counted < 0) {
-            showToast('warning', 'Ingresá el efectivo contado');
-            return;
+    // Calculate difference
+    const closeDifference = closeAmount ? parseFloat(closeAmount) - expectedCash : 0;
+    const differenceCss = closeDifference === 0 ? 'balanced' : closeDifference > 0 ? 'surplus' : 'deficit';
+
+    // Handle close cash register stepper navigation
+    const handleCloseNext = () => {
+        if (closeStep === 1) {
+            const counted = parseFloat(closeAmount);
+            if (isNaN(counted) || counted < 0) {
+                showToast('warning', 'Ingresá el efectivo contado');
+                return;
+            }
+            setCloseStep(2);
+        } else if (closeStep === 2) {
+            setCloseStep(3);
         }
+    };
 
-        const difference = counted - expectedCash;
+    const handleCloseBack = () => {
+        if (closeStep > 1) {
+            setCloseStep((closeStep - 1) as CloseStep);
+        }
+    };
 
-        showConfirm({
-            title: '¿Cerrar caja?',
-            message: difference !== 0
-                ? `Diferencia detectada: ${formatCurrency(difference)}. ¿Confirmar cierre?`
-                : 'La caja cuadra correctamente.',
-            confirmText: 'Cerrar caja',
-            cancelText: 'Cancelar',
-            variant: difference !== 0 ? 'warning' : 'default',
-            onConfirm: () => {
-                showToast('success', 'Caja cerrada correctamente');
-                setShowCloseModal(false);
-                setCloseAmount('');
-                setCloseNote('');
-            },
-            onCancel: () => { },
-        });
+    const handleCloseFinal = () => {
+        showToast('success', 'Caja cerrada correctamente');
+        setShowCloseModal(false);
+        setCloseAmount('');
+        setCloseNote('');
+        setCloseStep(1);
+    };
+
+    const handleCloseCancel = () => {
+        setShowCloseModal(false);
+        setCloseStep(1);
+        setCloseAmount('');
+        setCloseNote('');
     };
 
     return (
@@ -541,73 +556,200 @@ export function CashRegisterPage() {
                 </div>
             )}
 
-            {/* Close Cash Register Modal */}
+            {/* Close Cash Register Modal - Stepper */}
             {showCloseModal && openCashRegister && (
-                <div className="modal-backdrop" onClick={() => setShowCloseModal(false)}>
-                    <div className="modal" onClick={e => e.stopPropagation()}>
+                <div className="modal-backdrop" onClick={handleCloseCancel}>
+                    <div className="modal modal-lg" onClick={e => e.stopPropagation()}>
                         <div className="modal-header">
                             <h2 className="modal-title">Cerrar Caja</h2>
-                        </div>
-                        <div className="modal-body">
-                            {/* Summary */}
-                            <div className="cash-close-summary">
-                                <h4>Resumen del día</h4>
-                                <div className="cash-close-summary-grid">
-                                    <div className="cash-close-summary-item">
-                                        <span>Monto inicial</span>
-                                        <span>{formatCurrency(openCashRegister.openingAmount)}</span>
-                                    </div>
-                                    <div className="cash-close-summary-item success">
-                                        <span>Ventas efectivo</span>
-                                        <span>+{formatCurrency(openCashRegister.totalCash)}</span>
-                                    </div>
-                                    <div className="cash-close-summary-item danger">
-                                        <span>Gastos efectivo</span>
-                                        <span>-{formatCurrency(openCashRegister.totalExpensesCash)}</span>
-                                    </div>
-                                    <div className="cash-close-summary-item total">
-                                        <span>Efectivo esperado</span>
-                                        <span>{formatCurrency(expectedCash)}</span>
-                                    </div>
+                            {/* Stepper indicator */}
+                            <div className="close-stepper">
+                                <div className={`stepper-item ${closeStep >= 1 ? 'active' : ''} ${closeStep > 1 ? 'completed' : ''}`}>
+                                    <span className="stepper-number">1</span>
+                                    <span className="stepper-label">Contar</span>
+                                </div>
+                                <div className="stepper-connector" />
+                                <div className={`stepper-item ${closeStep >= 2 ? 'active' : ''} ${closeStep > 2 ? 'completed' : ''}`}>
+                                    <span className="stepper-number">2</span>
+                                    <span className="stepper-label">Revisar</span>
+                                </div>
+                                <div className="stepper-connector" />
+                                <div className={`stepper-item ${closeStep >= 3 ? 'active' : ''}`}>
+                                    <span className="stepper-number">3</span>
+                                    <span className="stepper-label">Confirmar</span>
                                 </div>
                             </div>
-
-                            <Input
-                                label="Efectivo contado"
-                                type="number"
-                                value={closeAmount}
-                                onChange={e => setCloseAmount(e.target.value)}
-                                placeholder="Ingresá el efectivo en caja"
-                                required
-                                autoFocus
-                            />
-
-                            {closeAmount && (
-                                <div className={`cash-difference ${parseFloat(closeAmount) - expectedCash === 0 ? 'balanced' :
-                                        parseFloat(closeAmount) - expectedCash > 0 ? 'surplus' : 'deficit'
-                                    }`}>
-                                    <AlertTriangle size={18} />
-                                    <span>
-                                        Diferencia: {formatCurrency(parseFloat(closeAmount) - expectedCash)}
-                                    </span>
+                        </div>
+                        <div className="modal-body">
+                            {/* Step 1: Count */}
+                            {closeStep === 1 && (
+                                <div className="close-step">
+                                    <div className="close-step-header">
+                                        <h3>Paso 1: Contá el efectivo</h3>
+                                        <p>Contá todo el efectivo en caja y anotá el total</p>
+                                    </div>
+                                    
+                                    <div className="close-expected">
+                                        <span>Efectivo esperado:</span>
+                                        <strong>{formatCurrency(expectedCash)}</strong>
+                                    </div>
+                                    
+                                    <Input
+                                        label="Efectivo contado"
+                                        type="number"
+                                        value={closeAmount}
+                                        onChange={e => setCloseAmount(e.target.value)}
+                                        placeholder="Ingresá el monto total"
+                                        required
+                                        autoFocus
+                                    />
+                                    
+                                    {closeAmount && (
+                                        <div className={`cash-difference ${differenceCss}`}>
+                                            {closeDifference === 0 ? (
+                                                <CheckCircle2 size={18} />
+                                            ) : (
+                                                <AlertTriangle size={18} />
+                                            )}
+                                            <span>
+                                                {closeDifference === 0 
+                                                    ? '¡La caja cuadra perfectamente!'
+                                                    : `Diferencia: ${formatCurrency(closeDifference)}`
+                                                }
+                                            </span>
+                                        </div>
+                                    )}
                                 </div>
                             )}
-
-                            <Input
-                                label="Nota (opcional)"
-                                value={closeNote}
-                                onChange={e => setCloseNote(e.target.value)}
-                                placeholder="Observaciones del cierre..."
-                                isOptional
-                            />
+                            
+                            {/* Step 2: Review */}
+                            {closeStep === 2 && (
+                                <div className="close-step">
+                                    <div className="close-step-header">
+                                        <h3>Paso 2: Revisá el resumen</h3>
+                                        <p>Verificá que los totales sean correctos</p>
+                                    </div>
+                                    
+                                    <div className="cash-close-summary">
+                                        <div className="cash-close-summary-grid">
+                                            <div className="cash-close-summary-item">
+                                                <span>Monto apertura</span>
+                                                <span>{formatCurrency(openCashRegister.openingAmount)}</span>
+                                            </div>
+                                            <div className="cash-close-summary-item success">
+                                                <span>+ Ventas efectivo</span>
+                                                <span>+{formatCurrency(openCashRegister.totalCash)}</span>
+                                            </div>
+                                            <div className="cash-close-summary-item danger">
+                                                <span>- Gastos efectivo</span>
+                                                <span>-{formatCurrency(openCashRegister.totalExpensesCash)}</span>
+                                            </div>
+                                            <div className="cash-close-summary-divider" />
+                                            <div className="cash-close-summary-item total">
+                                                <span>= Efectivo esperado</span>
+                                                <span>{formatCurrency(expectedCash)}</span>
+                                            </div>
+                                            <div className="cash-close-summary-item highlight">
+                                                <span>Tu conteo</span>
+                                                <span>{formatCurrency(parseFloat(closeAmount) || 0)}</span>
+                                            </div>
+                                        </div>
+                                        
+                                        <div className={`cash-difference-large ${differenceCss}`}>
+                                            {closeDifference === 0 ? (
+                                                <>
+                                                    <CheckCircle2 size={24} />
+                                                    <div>
+                                                        <strong>¡Perfecto!</strong>
+                                                        <p>La caja cuadra exactamente</p>
+                                                    </div>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <AlertTriangle size={24} />
+                                                    <div>
+                                                        <strong>Diferencia: {formatCurrency(closeDifference)}</strong>
+                                                        <p>{closeDifference > 0 ? 'Hay más efectivo del esperado' : 'Falta efectivo'}</p>
+                                                    </div>
+                                                </>
+                                            )}
+                                        </div>
+                                    </div>
+                                    
+                                    <Input
+                                        label="Nota sobre el cierre (opcional)"
+                                        value={closeNote}
+                                        onChange={e => setCloseNote(e.target.value)}
+                                        placeholder="Ej: Cliente me pagó después del horario"
+                                        isOptional
+                                    />
+                                </div>
+                            )}
+                            
+                            {/* Step 3: Confirm */}
+                            {closeStep === 3 && (
+                                <div className="close-step close-step-confirm">
+                                    <div className="close-confirm-icon">
+                                        {closeDifference === 0 ? (
+                                            <CheckCircle2 size={64} />
+                                        ) : (
+                                            <AlertTriangle size={64} />
+                                        )}
+                                    </div>
+                                    
+                                    <h3>¿Confirmar cierre de caja?</h3>
+                                    
+                                    <div className="close-confirm-summary">
+                                        <div className="close-confirm-row">
+                                            <span>Total ventas del día:</span>
+                                            <span>{formatCurrency(openCashRegister.totalCash + openCashRegister.totalTransfer + openCashRegister.totalCard + openCashRegister.totalCredit)}</span>
+                                        </div>
+                                        <div className="close-confirm-row">
+                                            <span>Diferencia:</span>
+                                            <span className={differenceCss}>{formatCurrency(closeDifference)}</span>
+                                        </div>
+                                        {closeNote && (
+                                            <div className="close-confirm-note">
+                                                <strong>Nota:</strong> {closeNote}
+                                            </div>
+                                        )}
+                                    </div>
+                                    
+                                    <p className="close-confirm-warning">
+                                        Esta acción no se puede deshacer. Asegurate que el conteo sea correcto.
+                                    </p>
+                                </div>
+                            )}
                         </div>
                         <div className="modal-footer">
-                            <Button variant="secondary" onClick={() => setShowCloseModal(false)}>
-                                Cancelar
-                            </Button>
-                            <Button variant="danger" onClick={handleClose}>
-                                Cerrar Caja
-                            </Button>
+                            {closeStep === 1 ? (
+                                <>
+                                    <Button variant="secondary" onClick={handleCloseCancel}>
+                                        Cancelar
+                                    </Button>
+                                    <Button variant="primary" onClick={handleCloseNext} disabled={!closeAmount}>
+                                        Siguiente
+                                    </Button>
+                                </>
+                            ) : closeStep === 2 ? (
+                                <>
+                                    <Button variant="ghost" onClick={handleCloseBack}>
+                                        Volver
+                                    </Button>
+                                    <Button variant="primary" onClick={handleCloseNext}>
+                                        Revisar y Confirmar
+                                    </Button>
+                                </>
+                            ) : (
+                                <>
+                                    <Button variant="ghost" onClick={handleCloseBack}>
+                                        Volver
+                                    </Button>
+                                    <Button variant="danger" onClick={handleCloseFinal}>
+                                        Cerrar Caja Definitivamente
+                                    </Button>
+                                </>
+                            )}
                         </div>
                     </div>
                 </div>

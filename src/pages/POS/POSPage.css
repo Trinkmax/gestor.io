@@ -160,10 +160,99 @@
     color: var(--color-primary-500);
 }
 
+/* Keyboard selected state */
+.pos-product-item.selected {
+    border-color: var(--color-primary-500);
+    background: var(--color-primary-50);
+    box-shadow: 0 0 0 2px var(--focus-ring-color);
+}
+
+.pos-product-item.selected .pos-product-add {
+    color: var(--color-primary-600);
+}
+
 .pos-no-results {
     text-align: center;
     padding: var(--space-8);
     color: var(--text-tertiary);
+}
+
+/* Suggestions panel */
+.pos-suggestions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+}
+
+.pos-suggestion-section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+}
+
+.pos-suggestion-title {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--text-sm);
+    font-weight: var(--font-semibold);
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+.pos-suggestion-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-2);
+}
+
+.pos-suggestion-item {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    padding: var(--space-3);
+    background: var(--bg-primary);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-md);
+    text-align: left;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.pos-suggestion-item:hover {
+    border-color: var(--color-primary-300);
+    background: var(--color-primary-50);
+}
+
+.pos-suggestion-name {
+    font-size: var(--text-sm);
+    font-weight: var(--font-medium);
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.pos-suggestion-price {
+    font-size: var(--text-xs);
+    color: var(--text-tertiary);
+}
+
+/* Empty state */
+.pos-empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    gap: var(--space-3);
+    color: var(--text-tertiary);
+    text-align: center;
+}
+
+.pos-empty-state p {
+    margin: 0;
+    font-size: var(--text-sm);
 }
 
 /* Hints */
@@ -362,10 +451,17 @@
 }
 
 .pos-payment-label {
-    display: block;
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
     font-size: var(--text-sm);
     color: var(--text-secondary);
     margin-bottom: var(--space-2);
+}
+
+.pos-payment-hint {
+    font-size: var(--text-xs);
+    color: var(--text-tertiary);
 }
 
 .pos-payment-options {
@@ -387,10 +483,30 @@
     transition: all var(--transition-fast);
     font-size: var(--text-xs);
     color: var(--text-secondary);
+    position: relative;
+}
+
+.pos-payment-btn kbd {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-sm);
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--text-tertiary);
+    margin-top: var(--space-1);
 }
 
 .pos-payment-btn:hover {
     border-color: var(--border-medium);
+}
+
+.pos-payment-btn:hover kbd {
+    background: var(--bg-tertiary);
 }
 
 .pos-payment-btn.active {
@@ -399,11 +515,38 @@
     color: var(--color-primary-700);
 }
 
+.pos-payment-btn.active kbd {
+    background: var(--color-primary-100);
+    border-color: var(--color-primary-200);
+    color: var(--color-primary-600);
+}
+
 .pos-payment-btn.fiado.active {
     border-color: var(--color-warning-500);
     background: var(--color-warning-50);
     color: var(--color-warning-700);
 }
+
+.pos-payment-btn.fiado.active kbd {
+    background: var(--color-warning-100);
+    border-color: var(--color-warning-200);
+    color: var(--color-warning-600);
+}
+
+/* Payment warning for fiado without client */
+.pos-payment-warning {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-top: var(--space-2);
+    padding: var(--space-2) var(--space-3);
+    background: var(--color-warning-50);
+    border: 1px solid var(--color-warning-200);
+    border-radius: var(--radius-md);
+    font-size: var(--text-xs);
+    color: var(--color-warning-700);
+}
+
 
 /* Footer */
 .pos-cart-footer {
@@ -584,10 +727,163 @@
     .pos-hints {
         display: none;
     }
+    
+    .pos-search-input {
+        font-size: var(--text-base);
+    }
+    
+    .pos-suggestion-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
 }
 
 @media (max-width: 768px) {
+    .pos-products {
+        padding: var(--space-3);
+    }
+    
+    .pos-cart-header {
+        padding: var(--space-3) var(--space-4);
+    }
+    
+    .pos-cart-items {
+        padding: var(--space-3);
+    }
+    
+    .pos-cart-footer {
+        padding: var(--space-3);
+    }
+    
     .pos-payment-options {
         grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .pos-payment-methods {
+        padding: var(--space-3);
+    }
+    
+    .pos-client-section {
+        padding: var(--space-3);
+    }
+    
+    .pos-suggestion-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .pos-product-item {
+        padding: var(--space-3);
+        gap: var(--space-3);
+    }
+    
+    .pos-cart-item {
+        padding: var(--space-2);
+    }
+    
+    .pos-cart-title {
+        font-size: var(--text-base);
+    }
+    
+    .pos-cart-total {
+        font-size: var(--text-base);
+    }
+    
+    .pos-cart-total-value {
+        font-size: var(--text-xl);
+    }
+}
+
+@media (max-width: 640px) {
+    .pos {
+        height: auto;
+        min-height: 100vh;
+    }
+    
+    .pos-products {
+        padding: var(--space-2);
+        min-height: 50vh;
+    }
+    
+    .pos-cart {
+        max-height: 60vh;
+        position: sticky;
+        bottom: 0;
+    }
+    
+    .pos-search-input {
+        padding: var(--space-3);
+        font-size: var(--text-sm);
+    }
+    
+    .pos-suggestion-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .pos-suggestion-item {
+        padding: var(--space-2);
+    }
+    
+    .pos-payment-options {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--space-1);
+    }
+    
+    .pos-payment-btn {
+        padding: var(--space-2);
+        font-size: 10px;
+        gap: 0;
+    }
+    
+    .pos-payment-btn kbd {
+        display: none;
+    }
+    
+    .pos-cart-item-name {
+        font-size: var(--text-xs);
+    }
+    
+    .pos-cart-qty button {
+        width: 20px;
+        height: 20px;
+    }
+    
+    .pos-cart-qty span {
+        min-width: 20px;
+        font-size: var(--text-xs);
+    }
+}
+
+@media (max-width: 480px) {
+    .pos-cart {
+        max-height: 65vh;
+    }
+    
+    .pos-cart-header,
+    .pos-cart-items,
+    .pos-cart-footer,
+    .pos-payment-methods,
+    .pos-client-section {
+        padding: var(--space-2);
+    }
+    
+    .pos-payment-options {
+        grid-template-columns: repeat(4, 1fr);
+    }
+    
+    .pos-payment-btn {
+        padding: var(--space-1);
+        font-size: 9px;
+    }
+    
+    .pos-payment-btn svg {
+        width: 16px;
+        height: 16px;
+    }
+    
+    .pos-cart-total {
+        margin-bottom: var(--space-2);
+    }
+    
+    .pos-drawer {
+        width: 100vw;
     }
 }

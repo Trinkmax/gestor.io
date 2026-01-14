@@ -18,17 +18,31 @@ import {
     X,
     UserPlus,
     Receipt,
+    Clock,
+    TrendingUp,
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { useUI } from '../../contexts/UIContext';
-import { Button, Badge, Modal } from '../../components/ui';
+import { Button, Badge, Modal, Tooltip } from '../../components/ui';
 import { formatCurrency } from '../../mocks/generators';
 import { mockProducts } from '../../mocks/data/products';
 import { mockClients } from '../../mocks/data/clients';
 import { getOpenCashRegister } from '../../mocks/data/sales';
 import type { Product, Client, CartItem, PaymentMethod } from '../../types';
 import './POSPage.css';
+
+// Payment method shortcuts
+const PAYMENT_SHORTCUTS: Record<string, PaymentMethod> = {
+    '1': 'CASH',
+    '2': 'TRANSFER',
+    '3': 'CARD',
+    '4': 'CREDIT',
+};
+
+// Local storage keys
+const LAST_PAYMENT_METHOD_KEY = 'gestor_last_payment_method';
+const RECENT_PRODUCTS_KEY = 'gestor_recent_products';
 
 export function POSPage() {
     const navigate = useNavigate();
@@ -39,12 +53,23 @@ export function POSPage() {
     const [searchQuery, setSearchQuery] = useState('');
     const [cart, setCart] = useState<CartItem[]>([]);
     const [selectedClient, setSelectedClient] = useState<Client | null>(null);
-    const [paymentMethod, setPaymentMethod] = useState<PaymentMethod | null>(null);
+    const [paymentMethod, setPaymentMethod] = useState<PaymentMethod | null>(() => {
+        // Restore last used payment method
+        const saved = localStorage.getItem(LAST_PAYMENT_METHOD_KEY);
+        return saved as PaymentMethod | null;
+    });
     const [showClientSearch, setShowClientSearch] = useState(false);
     const [showQuickClientModal, setShowQuickClientModal] = useState(false);
     const [showSuccessModal, setShowSuccessModal] = useState(false);
     const [lastSaleNumber, setLastSaleNumber] = useState<number | null>(null);
     const [clientSearchQuery, setClientSearchQuery] = useState('');
+    
+    // NEW: Keyboard navigation state
+    const [selectedResultIndex, setSelectedResultIndex] = useState(-1);
+    const [recentProductIds, setRecentProductIds] = useState<string[]>(() => {
+        const saved = localStorage.getItem(RECENT_PRODUCTS_KEY);
+        return saved ? JSON.parse(saved) : [];
+    });
 
     // Refs
     const searchInputRef = useRef<HTMLInputElement>(null);
@@ -73,6 +98,26 @@ export function POSPage() {
                 p.code?.toLowerCase().includes(query)
             )
             .slice(0, 8);
+    }, [searchQuery]);
+
+    // Recent products (for empty state)
+    const recentProducts = useMemo(() => {
+        return recentProductIds
+            .map(id => mockProducts.find(p => p.id === id))
+            .filter((p): p is Product => p !== undefined && p.isActive)
+            .slice(0, 4);
+    }, [recentProductIds]);
+
+    // Most sold products (mock - would come from API)
+    const popularProducts = useMemo(() => {
+        return mockProducts
+            .filter(p => p.isActive)
+            .slice(0, 4);
+    }, []);
+
+    // Reset selection when search changes
+    useEffect(() => {
+        setSelectedResultIndex(-1);
     }, [searchQuery]);
 
     // Filter clients
@@ -135,7 +180,15 @@ export function POSPage() {
             return [...prev, newItem];
         });
 
+        // Save to recent products
+        setRecentProductIds(prev => {
+            const updated = [product.id, ...prev.filter(id => id !== product.id)].slice(0, 10);
+            localStorage.setItem(RECENT_PRODUCTS_KEY, JSON.stringify(updated));
+            return updated;
+        });
+
         setSearchQuery('');
+        setSelectedResultIndex(-1);
         searchInputRef.current?.focus();
     }, [businessConfig.allowNegativeStock, showToast]);
 
@@ -218,6 +271,8 @@ export function POSPage() {
             showToast('info', 'Seleccioná un cliente para fiado');
         }
         setPaymentMethod(method);
+        // Save to localStorage
+        localStorage.setItem(LAST_PAYMENT_METHOD_KEY, method);
     }, [selectedClient, showToast]);
 
     // Confirm sale
@@ -259,34 +314,83 @@ export function POSPage() {
         searchInputRef.current?.focus();
     }, []);
 
-    // Keyboard shortcuts
+    // Handle search input key navigation
+    const handleSearchKeyDown = useCallback((e: React.KeyboardEvent<HTMLInputElement>) => {
+        const results = filteredProducts;
+        
+        switch (e.key) {
+            case 'ArrowDown':
+                e.preventDefault();
+                setSelectedResultIndex(prev => 
+                    prev < results.length - 1 ? prev + 1 : prev
+                );
+                break;
+            case 'ArrowUp':
+                e.preventDefault();
+                setSelectedResultIndex(prev => prev > 0 ? prev - 1 : -1);
+                break;
+            case 'Enter':
+                e.preventDefault();
+                if (selectedResultIndex >= 0 && results[selectedResultIndex]) {
+                    addToCart(results[selectedResultIndex]);
+                } else if (results.length === 1) {
+                    // Auto-add if only one result
+                    addToCart(results[0]);
+                }
+                break;
+            case 'Escape':
+                e.preventDefault();
+                if (searchQuery) {
+                    setSearchQuery('');
+                    setSelectedResultIndex(-1);
+                }
+                break;
+        }
+    }, [filteredProducts, selectedResultIndex, addToCart, searchQuery]);
+
+    // Global keyboard shortcuts
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
+            // Ignore if typing in an input (except for shortcuts with modifiers)
+            const isTyping = ['INPUT', 'TEXTAREA', 'SELECT'].includes(
+                (e.target as HTMLElement).tagName
+            );
+            
             // Focus search: Ctrl/Cmd + K
             if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
                 e.preventDefault();
                 searchInputRef.current?.focus();
+                return;
             }
 
             // Confirm sale: Ctrl/Cmd + Enter
             if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
                 e.preventDefault();
                 confirmSale();
+                return;
             }
 
             // Escape: Close modals or clear search
             if (e.key === 'Escape') {
                 if (showClientSearch) {
                     setShowClientSearch(false);
-                } else if (searchQuery) {
-                    setSearchQuery('');
+                } else if (showQuickClientModal) {
+                    setShowQuickClientModal(false);
                 }
+                return;
+            }
+
+            // Payment shortcuts (only when not typing in input)
+            if (!isTyping && PAYMENT_SHORTCUTS[e.key]) {
+                e.preventDefault();
+                selectPaymentMethod(PAYMENT_SHORTCUTS[e.key]);
+                return;
             }
         };
 
         document.addEventListener('keydown', handleKeyDown);
         return () => document.removeEventListener('keydown', handleKeyDown);
-    }, [searchQuery, showClientSearch, confirmSale]);
+    }, [searchQuery, showClientSearch, showQuickClientModal, confirmSale, selectPaymentMethod]);
 
     // Can't sell without cash register
     if (!canSell) {
@@ -303,6 +407,7 @@ export function POSPage() {
     }
 
     const canEditPrices = hasPermission('EDIT_SALE_PRICES');
+    const showSuggestions = !searchQuery.trim() && (recentProducts.length > 0 || popularProducts.length > 0);
 
     return (
         <div className="pos">
@@ -317,12 +422,19 @@ export function POSPage() {
                         placeholder="Buscar producto (nombre o código)..."
                         value={searchQuery}
                         onChange={e => setSearchQuery(e.target.value)}
+                        onKeyDown={handleSearchKeyDown}
                         autoComplete="off"
+                        aria-label="Buscar producto"
+                        aria-describedby="search-hint"
                     />
                     {searchQuery && (
                         <button
                             className="pos-search-clear"
-                            onClick={() => setSearchQuery('')}
+                            onClick={() => {
+                                setSearchQuery('');
+                                searchInputRef.current?.focus();
+                            }}
+                            aria-label="Limpiar búsqueda"
                         >
                             <X size={18} />
                         </button>
@@ -331,12 +443,15 @@ export function POSPage() {
 
                 {/* Search Results */}
                 {filteredProducts.length > 0 && (
-                    <div className="pos-results">
-                        {filteredProducts.map(product => (
+                    <div className="pos-results" role="listbox" aria-label="Resultados de búsqueda">
+                        {filteredProducts.map((product, index) => (
                             <button
                                 key={product.id}
-                                className="pos-product-item"
+                                className={`pos-product-item ${index === selectedResultIndex ? 'selected' : ''}`}
                                 onClick={() => addToCart(product)}
+                                role="option"
+                                aria-selected={index === selectedResultIndex}
+                                tabIndex={-1}
                             >
                                 <div className="pos-product-info">
                                     <span className="pos-product-name">{product.name}</span>
@@ -358,17 +473,75 @@ export function POSPage() {
                     </div>
                 )}
 
+                {/* No results */}
                 {searchQuery && filteredProducts.length === 0 && (
                     <div className="pos-no-results">
                         <p>No se encontraron productos</p>
                     </div>
                 )}
 
+                {/* Suggestions when no search */}
+                {showSuggestions && (
+                    <div className="pos-suggestions">
+                        {/* Recent Products */}
+                        {recentProducts.length > 0 && (
+                            <div className="pos-suggestion-section">
+                                <h3 className="pos-suggestion-title">
+                                    <Clock size={16} />
+                                    Recientes
+                                </h3>
+                                <div className="pos-suggestion-grid">
+                                    {recentProducts.map(product => (
+                                        <button
+                                            key={product.id}
+                                            className="pos-suggestion-item"
+                                            onClick={() => addToCart(product)}
+                                        >
+                                            <span className="pos-suggestion-name">{product.name}</span>
+                                            <span className="pos-suggestion-price">{formatCurrency(product.price)}</span>
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Popular Products */}
+                        <div className="pos-suggestion-section">
+                            <h3 className="pos-suggestion-title">
+                                <TrendingUp size={16} />
+                                Más vendidos
+                            </h3>
+                            <div className="pos-suggestion-grid">
+                                {popularProducts.map(product => (
+                                    <button
+                                        key={product.id}
+                                        className="pos-suggestion-item"
+                                        onClick={() => addToCart(product)}
+                                    >
+                                        <span className="pos-suggestion-name">{product.name}</span>
+                                        <span className="pos-suggestion-price">{formatCurrency(product.price)}</span>
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {/* Empty state with instructions */}
+                {!searchQuery && !showSuggestions && (
+                    <div className="pos-empty-state">
+                        <ShoppingCart size={48} />
+                        <p>Escaneá un código o buscá por nombre</p>
+                    </div>
+                )}
+
                 {/* Keyboard hints */}
-                <div className="pos-hints">
+                <div className="pos-hints" id="search-hint">
                     <span><kbd>⌘K</kbd> Buscar</span>
-                    <span><kbd>⌘↵</kbd> Confirmar venta</span>
-                    <span><kbd>Esc</kbd> Limpiar</span>
+                    <span><kbd>↑↓</kbd> Navegar</span>
+                    <span><kbd>Enter</kbd> Agregar</span>
+                    <span><kbd>1-4</kbd> Medio pago</span>
+                    <span><kbd>⌘↵</kbd> Confirmar</span>
                 </div>
             </div>
 
@@ -383,9 +556,11 @@ export function POSPage() {
                         )}
                     </div>
                     {cart.length > 0 && (
-                        <Button variant="ghost" size="sm" onClick={clearCart}>
-                            <Trash2 size={16} />
-                        </Button>
+                        <Tooltip content="Vaciar carrito">
+                            <Button variant="ghost" size="sm" onClick={clearCart} aria-label="Vaciar carrito">
+                                <Trash2 size={16} />
+                            </Button>
+                        </Tooltip>
                     )}
                 </div>
 
@@ -411,11 +586,17 @@ export function POSPage() {
                                 <div className="pos-cart-item-controls">
                                     {/* Quantity */}
                                     <div className="pos-cart-qty">
-                                        <button onClick={() => updateQuantity(item.productId, -1)}>
+                                        <button 
+                                            onClick={() => updateQuantity(item.productId, -1)}
+                                            aria-label="Reducir cantidad"
+                                        >
                                             <Minus size={14} />
                                         </button>
                                         <span>{item.quantity}</span>
-                                        <button onClick={() => updateQuantity(item.productId, 1)}>
+                                        <button 
+                                            onClick={() => updateQuantity(item.productId, 1)}
+                                            aria-label="Aumentar cantidad"
+                                        >
                                             <Plus size={14} />
                                         </button>
                                     </div>
@@ -428,6 +609,7 @@ export function POSPage() {
                                                 value={item.unitPrice}
                                                 onChange={e => updatePrice(item.productId, parseFloat(e.target.value) || 0)}
                                                 className="pos-cart-price-input"
+                                                aria-label="Precio unitario"
                                             />
                                         ) : (
                                             <span>{formatCurrency(item.unitPrice)}</span>
@@ -443,6 +625,7 @@ export function POSPage() {
                                     <button
                                         className="pos-cart-remove"
                                         onClick={() => removeFromCart(item.productId)}
+                                        aria-label="Eliminar producto"
                                     >
                                         <X size={16} />
                                     </button>
@@ -463,7 +646,7 @@ export function POSPage() {
                                     Debe {formatCurrency(selectedClient.balance)}
                                 </Badge>
                             )}
-                            <button onClick={() => setSelectedClient(null)}>
+                            <button onClick={() => setSelectedClient(null)} aria-label="Quitar cliente">
                                 <X size={14} />
                             </button>
                         </div>
@@ -481,37 +664,58 @@ export function POSPage() {
 
                 {/* Payment Methods */}
                 <div className="pos-payment-methods">
-                    <span className="pos-payment-label">Medio de pago:</span>
-                    <div className="pos-payment-options">
+                    <span className="pos-payment-label">
+                        Medio de pago:
+                        <span className="pos-payment-hint">(teclas 1-4)</span>
+                    </span>
+                    <div className="pos-payment-options" role="radiogroup" aria-label="Seleccionar medio de pago">
                         <button
                             className={`pos-payment-btn ${paymentMethod === 'CASH' ? 'active' : ''}`}
                             onClick={() => selectPaymentMethod('CASH')}
+                            role="radio"
+                            aria-checked={paymentMethod === 'CASH'}
                         >
                             <Banknote size={18} />
                             <span>Efectivo</span>
+                            <kbd>1</kbd>
                         </button>
                         <button
                             className={`pos-payment-btn ${paymentMethod === 'TRANSFER' ? 'active' : ''}`}
                             onClick={() => selectPaymentMethod('TRANSFER')}
+                            role="radio"
+                            aria-checked={paymentMethod === 'TRANSFER'}
                         >
                             <ArrowRight size={18} />
-                            <span>Transferencia</span>
+                            <span>Transfer</span>
+                            <kbd>2</kbd>
                         </button>
                         <button
                             className={`pos-payment-btn ${paymentMethod === 'CARD' ? 'active' : ''}`}
                             onClick={() => selectPaymentMethod('CARD')}
+                            role="radio"
+                            aria-checked={paymentMethod === 'CARD'}
                         >
                             <CreditCard size={18} />
                             <span>Tarjeta</span>
+                            <kbd>3</kbd>
                         </button>
                         <button
                             className={`pos-payment-btn fiado ${paymentMethod === 'CREDIT' ? 'active' : ''}`}
                             onClick={() => selectPaymentMethod('CREDIT')}
+                            role="radio"
+                            aria-checked={paymentMethod === 'CREDIT'}
                         >
                             <User size={18} />
                             <span>Fiado</span>
+                            <kbd>4</kbd>
                         </button>
                     </div>
+                    {paymentMethod === 'CREDIT' && !selectedClient && (
+                        <div className="pos-payment-warning">
+                            <AlertTriangle size={14} />
+                            Seleccioná un cliente para fiado
+                        </div>
+                    )}
                 </div>
 
                 {/* Total & Confirm */}
@@ -525,7 +729,7 @@ export function POSPage() {
                         variant="success"
                         size="xl"
                         fullWidth
-                        disabled={cart.length === 0 || !paymentMethod}
+                        disabled={cart.length === 0 || !paymentMethod || (paymentMethod === 'CREDIT' && !selectedClient)}
                         onClick={confirmSale}
                         leftIcon={<Receipt size={20} />}
                     >
@@ -540,7 +744,7 @@ export function POSPage() {
                     <div className="pos-drawer" onClick={e => e.stopPropagation()}>
                         <div className="pos-drawer-header">
                             <h3>Seleccionar cliente</h3>
-                            <button onClick={() => setShowClientSearch(false)}>
+                            <button onClick={() => setShowClientSearch(false)} aria-label="Cerrar">
                                 <X size={20} />
                             </button>
                         </div>

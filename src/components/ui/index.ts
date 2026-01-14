@@ -20,3 +20,7 @@ export { Badge } from './Badge';
 export type { BadgeProps, BadgeVariant, BadgeSize } from './Badge';
 
 export { PermissionGate, usePermission } from './PermissionGate';
+
+export { Skeleton, TableSkeleton, CardSkeleton } from './Skeleton';
+
+export { Tooltip } from './Tooltip';

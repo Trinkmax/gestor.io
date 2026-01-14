@@ -26,8 +26,12 @@ body {
     font-size: var(--text-base);
     line-height: var(--leading-normal);
     color: var(--text-primary);
-    background-color: var(--bg-secondary);
+    background: linear-gradient(to bottom, 
+        var(--bg-secondary) 0%, 
+        var(--color-neutral-50) 100%);
     min-height: 100vh;
+    font-feature-settings: 'ss01', 'ss02', 'cv01', 'cv03';
+    text-rendering: optimizeLegibility;
 }
 
 #root {
@@ -100,12 +104,75 @@ select {
     font-size: var(--text-base);
 }
 
-input:focus,
-textarea:focus,
-select:focus,
-button:focus {
-    outline: 2px solid var(--color-primary-500);
-    outline-offset: 2px;
+/* ========== FOCUS STYLES (Accessibility) ========== */
+/* Remove default outline, use focus-visible for keyboard users */
+*:focus {
+    outline: none;
+}
+
+*:focus-visible {
+    outline: var(--focus-ring-width) solid var(--focus-ring-color);
+    outline-offset: var(--focus-ring-offset);
+}
+
+/* Specific focus styles for inputs */
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+    border-color: var(--color-primary-500);
+    box-shadow: 0 0 0 var(--focus-ring-width) var(--focus-ring-color);
+}
+
+/* Skip link for accessibility */
+.skip-link {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    padding: var(--space-2) var(--space-4);
+    background: var(--color-primary-600);
+    color: white;
+    z-index: 9999;
+    transition: top var(--transition-fast);
+}
+
+.skip-link:focus {
+    top: 0;
+}
+
+/* ========== SKELETON LOADING ========== */
+@keyframes skeleton-pulse {
+    0%, 100% {
+        background-color: var(--skeleton-base);
+    }
+    50% {
+        background-color: var(--skeleton-shine);
+    }
+}
+
+.skeleton {
+    background-color: var(--skeleton-base);
+    animation: skeleton-pulse 1.5s ease-in-out infinite;
+    border-radius: var(--radius-sm);
+}
+
+.skeleton-text {
+    height: 1em;
+    width: 100%;
+}
+
+.skeleton-text-sm {
+    height: 0.875em;
+    width: 60%;
+}
+
+.skeleton-circle {
+    border-radius: var(--radius-full);
+}
+
+.skeleton-row {
+    display: flex;
+    gap: var(--space-3);
+    padding: var(--space-3) var(--space-4);
 }
 
 /* ========== TABLES ========== */
@@ -478,38 +545,290 @@ ol {
     transition: all var(--transition-base);
 }
 
-/* ========== SCROLLBAR ========== */
+/* ========== SCROLLBAR - 2026 MODERN ========== */
 ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+    width: 10px;
+    height: 10px;
 }
 
 ::-webkit-scrollbar-track {
     background: var(--bg-tertiary);
+    border-radius: var(--radius-full);
+    margin: var(--space-2);
 }
 
 ::-webkit-scrollbar-thumb {
-    background: var(--color-neutral-400);
+    background: linear-gradient(180deg, 
+        var(--color-neutral-400), 
+        var(--color-neutral-500));
     border-radius: var(--radius-full);
+    border: 2px solid var(--bg-tertiary);
+    transition: background 0.3s ease;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: var(--color-neutral-500);
+    background: linear-gradient(180deg, 
+        var(--color-primary-400), 
+        var(--color-primary-500));
 }
 
-/* ========== RESPONSIVE ========== */
-@media (max-width: 768px) {
+/* Firefox scrollbar */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-neutral-400) var(--bg-tertiary);
+}
+
+/* ========== PREMIUM EFFECTS - 2026 ========== */
+
+/* Glassmorphism */
+.glass {
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.glass-strong {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+}
+
+/* Gradient text */
+.gradient-text {
+    background: linear-gradient(135deg, 
+        var(--color-primary-600) 0%, 
+        var(--color-primary-700) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Elevation & Depth */
+.elevation-1 {
+    box-shadow: 
+        0 2px 8px -2px rgba(0, 0, 0, 0.1),
+        0 0 1px 0 rgba(0, 0, 0, 0.1);
+}
+
+.elevation-2 {
+    box-shadow: 
+        0 4px 16px -4px rgba(0, 0, 0, 0.12),
+        0 2px 8px -2px rgba(0, 0, 0, 0.08);
+}
+
+.elevation-3 {
+    box-shadow: 
+        0 8px 24px -8px rgba(0, 0, 0, 0.15),
+        0 4px 12px -4px rgba(0, 0, 0, 0.1);
+}
+
+/* Smooth transforms */
+.hover-lift {
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hover-lift:hover {
+    transform: translateY(-4px);
+}
+
+.hover-scale {
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hover-scale:hover {
+    transform: scale(1.05);
+}
+
+/* Smooth animations */
+.animate-fade-in {
+    animation: fadeIn 0.4s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.animate-slide-up {
+    animation: slideUp 0.4s ease-out;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Premium borders */
+.border-gradient {
+    border: 2px solid transparent;
+    background: linear-gradient(white, white) padding-box,
+                linear-gradient(135deg, var(--color-primary-400), var(--color-primary-600)) border-box;
+}
+
+/* Smooth transitions */
+.transition-smooth {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ========== RESPONSIVE UTILITIES ========== */
+
+/* Visibility helpers */
+.show-mobile {
+    display: none !important;
+}
+
+.show-tablet {
+    display: none !important;
+}
+
+.hide-mobile {
+    display: block !important;
+}
+
+.hide-tablet {
+    display: block !important;
+}
+
+.hide-desktop {
+    display: none !important;
+}
+
+/* Container padding adjustments */
+.container-responsive {
+    padding-left: var(--space-6);
+    padding-right: var(--space-6);
+}
+
+/* Text responsive */
+.text-responsive {
+    font-size: clamp(var(--text-sm), 2vw, var(--text-base));
+}
+
+.heading-responsive {
+    font-size: clamp(var(--text-xl), 4vw, var(--text-3xl));
+}
+
+/* Flex responsive */
+.flex-responsive {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+}
+
+/* Grid responsive helpers */
+.grid-responsive {
+    display: grid;
+    gap: var(--space-4);
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+
+.grid-responsive-sm {
+    display: grid;
+    gap: var(--space-3);
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+}
+
+/* ========== RESPONSIVE BREAKPOINTS ========== */
+
+/* Extra small devices (phones, less than 640px) */
+@media (max-width: 639px) {
     html {
         font-size: 14px;
+    }
+
+    body {
+        padding: 0;
     }
 
     .hide-mobile {
         display: none !important;
     }
+    
+    .show-mobile {
+        display: block !important;
+    }
+    
+    .container-responsive {
+        padding-left: var(--space-4);
+        padding-right: var(--space-4);
+    }
+    
+    /* Reduce animations on mobile for performance */
+    .hover-lift:hover,
+    .hover-scale:hover {
+        transform: none;
+    }
+    
+    /* Stack columns on mobile */
+    .grid-cols-2,
+    .grid-cols-3,
+    .grid-cols-4 {
+        grid-template-columns: 1fr !important;
+    }
+    
+    /* Adjust spacing on mobile */
+    .gap-8 {
+        gap: var(--space-4);
+    }
+    
+    .gap-6 {
+        gap: var(--space-3);
+    }
 }
 
-@media (min-width: 769px) {
+/* Small devices (tablets, 640px and up) */
+@media (min-width: 640px) and (max-width: 767px) {
+    .hide-tablet {
+        display: none !important;
+    }
+    
+    .show-tablet {
+        display: block !important;
+    }
+}
+
+/* Medium devices (tablets, 768px and up) */
+@media (max-width: 768px) {
+    html {
+        font-size: 15px;
+    }
+    
+    .container-responsive {
+        padding-left: var(--space-5);
+        padding-right: var(--space-5);
+    }
+}
+
+/* Large devices (desktops, 1024px and up) */
+@media (min-width: 1024px) {
     .hide-desktop {
         display: none !important;
+    }
+    
+    .show-desktop {
+        display: block !important;
+    }
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
     }
 }

@@ -125,10 +125,35 @@
         left: var(--space-4);
         right: var(--space-4);
         bottom: var(--space-4);
+        gap: var(--space-2);
     }
 
     .toast {
         min-width: auto;
         max-width: none;
+        padding: var(--space-3);
+        gap: var(--space-2);
+    }
+    
+    .toast-message {
+        font-size: var(--text-xs);
+    }
+}
+
+@media (max-width: 480px) {
+    .toast-container {
+        left: var(--space-2);
+        right: var(--space-2);
+        bottom: var(--space-2);
+    }
+    
+    .toast {
+        padding: var(--space-2);
+        border-radius: var(--radius-md);
+    }
+    
+    .toast-icon {
+        width: 18px;
+        height: 18px;
     }
 }

@@ -124,9 +124,65 @@
 @media (max-width: 768px) {
     .exports-grid {
         grid-template-columns: 1fr;
+        gap: var(--space-4);
     }
 
     .export-date-range {
         grid-template-columns: 1fr;
+    }
+    
+    .export-options {
+        gap: var(--space-2);
+    }
+    
+    .export-option {
+        padding: var(--space-3);
+        gap: var(--space-3);
+    }
+    
+    .export-option-icon {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .export-option-title {
+        font-size: var(--text-sm);
+    }
+    
+    .export-option-desc {
+        font-size: var(--text-xs);
+    }
+    
+    .export-placeholder {
+        padding: var(--space-8);
+    }
+}
+
+@media (max-width: 480px) {
+    .exports-grid {
+        gap: var(--space-3);
+    }
+    
+    .export-option {
+        padding: var(--space-2);
+        gap: var(--space-2);
+    }
+    
+    .export-option-icon {
+        width: 36px;
+        height: 36px;
+    }
+    
+    .export-config h3 {
+        font-size: var(--text-base);
+    }
+    
+    .export-placeholder {
+        padding: var(--space-6);
+    }
+    
+    .export-success {
+        padding: var(--space-2);
+        font-size: var(--text-xs);
     }
 }

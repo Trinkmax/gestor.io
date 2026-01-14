@@ -71,11 +71,20 @@ export interface StatCardProps {
         value: number;
         label?: string;
     };
+    onClick?: () => void;
+    hint?: string;
 }
 
-export function StatCard({ label, value, icon, iconColor = 'primary', change }: StatCardProps) {
+export function StatCard({ label, value, icon, iconColor = 'primary', change, onClick, hint }: StatCardProps) {
+    const Component = onClick ? 'button' : 'div';
+    
     return (
-        <div className="card stat-card">
+        <Component 
+            className={`card stat-card ${onClick ? 'stat-card-clickable' : ''}`}
+            onClick={onClick}
+            type={onClick ? 'button' : undefined}
+            aria-label={onClick ? `${label}: ${value}. Clic para ver más.` : undefined}
+        >
             <div className="stat-card-header">
                 <div>
                     <p className="stat-card-label">{label}</p>
@@ -87,6 +96,7 @@ export function StatCard({ label, value, icon, iconColor = 'primary', change }: 
                             {change.label && <span> {change.label}</span>}
                         </span>
                     )}
+                    {hint && <p className="stat-card-hint">{hint}</p>}
                 </div>
                 {icon && (
                     <div className={`stat-card-icon ${iconColor}`}>
@@ -94,9 +104,10 @@ export function StatCard({ label, value, icon, iconColor = 'primary', change }: 
                     </div>
                 )}
             </div>
-        </div>
+        </Component>
     );
 }
+
 
 // Alert Card
 export interface AlertCardProps {

@@ -15,8 +15,8 @@ import { ProductsPage } from './pages/Products';
 import { SettingsPage } from './pages/Settings';
 import { ClientsPage } from './pages/Clients';
 import { ExportsPage } from './pages/Exports';
+import { ReportsPage } from './pages/Reports';
 import {
-  ReportsPage,
   UsersPage,
   LoginPage,
 } from './pages/Placeholder';
